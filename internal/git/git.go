@@ -10,10 +10,10 @@ import (
 // GetGitDiff returns both unstaged and staged diffs
 func GetGitDiff() (string, error) {
 
-	// 1️⃣ Stage everything BEFORE checking diff
+	//Stage everything BEFORE checking diff
 	exec.Command("git", "add", ".").Run()
 
-	// 2️⃣ Fetch staged changes
+	//Fetch staged changes
 	cmd := exec.Command("git", "diff", "--staged")
 	var out bytes.Buffer
 	cmd.Stdout = &out
@@ -21,7 +21,7 @@ func GetGitDiff() (string, error) {
 
 	diff := out.String()
 
-	// 3️⃣ No changes? return empty
+	//No changes? return empty
 	if strings.TrimSpace(diff) == "" {
 		return "", nil
 	}

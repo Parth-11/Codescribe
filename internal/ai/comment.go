@@ -22,10 +22,6 @@ type GroqChatResponse struct {
 	} `json:"choices"`
 }
 
-// ----------------------------
-// MAIN FUNC – COMMENT A FILE
-// ----------------------------
-
 func AddCommentsToFile(path string) error {
 	codeBytes, err := os.ReadFile(path)
 	if err != nil {
@@ -57,10 +53,6 @@ func AddCommentsToFile(path string) error {
 	return os.WriteFile(path, []byte(commentedBuilder.String()), 0644)
 }
 
-// ----------------------------
-// CHUNKING SYSTEM
-// ----------------------------
-
 func splitIntoChunks(text string, size int) []string {
 	var chunks []string
 	runes := []rune(text)
@@ -72,10 +64,6 @@ func splitIntoChunks(text string, size int) []string {
 	chunks = append(chunks, string(runes))
 	return chunks
 }
-
-// ----------------------------
-// REQUEST AI COMMENTING (with retries)
-// ----------------------------
 
 func requestAICommenting(code string) (string, error) {
 	apiKey := os.Getenv("GROQ_API_KEY")
@@ -98,13 +86,9 @@ func requestAICommenting(code string) (string, error) {
 	return "", fmt.Errorf("groq API failed after 3 retries")
 }
 
-// ----------------------------
-// ACTUAL GROQ API CALL
-// ----------------------------
-
 func callGroqAPI(code string) (string, error) {
 
-	// ✨ STRICT SYSTEM PROMPT to prevent rewriting code ✨
+	//STRICT SYSTEM PROMPT to prevent rewriting code
 	systemPrompt := `
 You are a professional code annotator.
 

@@ -68,7 +68,7 @@ func GenerateCommitMessages(diff string) ([]string, error) {
 		return nil, fmt.Errorf("JSON parse error: %v\nRAW: %s", err, string(raw))
 	}
 
-	// 🔥 FIX: ensure Groq returned choices
+	//FIX: ensure Groq returned choices
 	if len(out.Choices) == 0 || out.Choices[0].Message.Content == "" {
 		return nil, fmt.Errorf("empty Groq response: %s", string(raw))
 	}
