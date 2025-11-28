@@ -45,7 +45,7 @@ func CommitAndPush(message string) error {
 	if err != nil {
 		// If there is nothing to commit → avoid failure
 		if strings.Contains(err.Error(), "nothing to commit") {
-			fmt.Println("⚠️ Nothing new to commit.")
+			fmt.Println("Nothing new to commit.")
 			return nil
 		}
 		return fmt.Errorf("git commit failed: %w", err)
