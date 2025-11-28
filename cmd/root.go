@@ -12,7 +12,7 @@ import (
 )
 
 var rootCmd = &cobra.Command{
-	Use:   "ai-commit",
+	Use:   "codescribe",
 	Short: "AI-powered conventional commit generator using Groq",
 	RunE: func(cmd *cobra.Command, args []string) error {
 
