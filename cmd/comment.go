@@ -23,21 +23,21 @@ var commentCmd = &cobra.Command{
 			return fmt.Errorf("must provide --src and --out")
 		}
 
-		fmt.Println("📁 Copying source code...")
+		fmt.Println("Copying source code...")
 		files, err := fs.CopyCodebase(srcDir, outDir)
 		if err != nil {
 			return err
 		}
 
-		fmt.Println("🧠 Adding AI-generated comments...")
+		fmt.Println("Adding AI-generated comments...")
 
 		for _, f := range files {
 			if err := ai.AddCommentsToFile(f); err != nil {
-				fmt.Printf("⚠️ Failed to comment %s: %v\n", f, err)
+				fmt.Printf("Failed to comment %s: %v\n", f, err)
 			}
 		}
 
-		fmt.Println("✅ Code commented and saved at:", outDir)
+		fmt.Println("Code commented and saved at:", outDir)
 		return nil
 	},
 }

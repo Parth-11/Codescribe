@@ -4,31 +4,54 @@ import (
 	"bytes"
 	"fmt"
 	"os/exec"
+	"strings"
 )
 
-// capture git diff
+// GetGitDiff returns both unstaged and staged diffs
 func GetGitDiff() (string, error) {
+
+	// 1️⃣ Stage everything BEFORE checking diff
+	exec.Command("git", "add", ".").Run()
+
+	// 2️⃣ Fetch staged changes
 	cmd := exec.Command("git", "diff", "--staged")
 	var out bytes.Buffer
 	cmd.Stdout = &out
-	err := cmd.Run()
-	return out.String(), err
+	_ = cmd.Run()
+
+	diff := out.String()
+
+	// 3️⃣ No changes? return empty
+	if strings.TrimSpace(diff) == "" {
+		return "", nil
+	}
+
+	return diff, nil
 }
 
-// commit + push
+// CommitAndPush performs commit + push
 func CommitAndPush(message string) error {
 
-	// stage all changes
+	// Make sure everything is staged again (safe)
 	if err := exec.Command("git", "add", ".").Run(); err != nil {
 		return fmt.Errorf("git add failed: %w", err)
 	}
 
-	// commit
-	if err := exec.Command("git", "commit", "-m", message).Run(); err != nil {
+	// Create the commit
+	commitCmd := exec.Command("git", "commit", "-m", message)
+
+	// Suppress output noise but capture errors
+	err := commitCmd.Run()
+	if err != nil {
+		// If there is nothing to commit → avoid failure
+		if strings.Contains(err.Error(), "nothing to commit") {
+			fmt.Println("⚠️ Nothing new to commit.")
+			return nil
+		}
 		return fmt.Errorf("git commit failed: %w", err)
 	}
 
-	// push
+	// Push commit to remote
 	if err := exec.Command("git", "push").Run(); err != nil {
 		return fmt.Errorf("git push failed: %w", err)
 	}
